@@ -2,7 +2,10 @@ import requests
 import json
 import time
 
-while(True):
+counter = 0
+
+#initially setup to do 2 hours worth of scraping (8x15 minute iterations)
+while(counter<8):
         #using time variables for our filenames to make them distinct - will help with database setup
         minutes = str(time.gmtime().tm_min)
         hour = str(time.gmtime().tm_hour)
@@ -32,7 +35,10 @@ while(True):
                     json.dump(data, file, ensure_ascii=False)
                     file.write(",")
 
-        #stops array at end of file by inserting square bracket
-        with open("testOverallData.json","a") as file:
-                file.write("]")
-        time.sleep(900) #15 minute sleep
+                counter +=1
+                time.sleep(900) #15 minute sleep
+                
+#stops array at end of file by inserting square bracket
+with open("testOverallData.json","a") as file:
+         file.write("]")
+        
