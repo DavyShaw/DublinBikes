@@ -21,23 +21,24 @@ def mapview():
     output = []    
     
     #note there is no station 50 so need to split the ranges
-    for i in range(1,50)+range(51,103):	
-	r = requests.get("https://api.jcdecaux.com/vls/v1/stations/" + str(i) + "?contract=Dublin&apiKey=c64916b14c557faa49fdf72b8902e4d9ff9afe35")
-	data = r.json()
-	infobox = "Name: " + str(data["name"]) + "<br/>" + "Status: " + str(data["status"]) + "<br/>" + "Available Stands: " + str(data["available_bike_stands"]) + "</br>" + "Available Bikes: " + str(data["available_bikes"])
-	output.append(
-                {
-                        'icon': icons.dots.blue,
-                    	'lat': data["position"]["lat"],
-			'lng': data["position"]["lng"],
-			'infobox': infobox
-                }
-	    )
+    for i in range(1,103):
+        if(i!=50):
+            r = requests.get("https://api.jcdecaux.com/vls/v1/stations/" + str(i) + "?contract=Dublin&apiKey=c64916b14c557faa49fdf72b8902e4d9ff9afe35")
+            data = r.json()
+            infobox = "Name: " + str(data["name"]) + "<br/>" + "Status: " + str(data["status"]) + "<br/>" + "Available Stands: " + str(data["available_bike_stands"]) + "</br>" + "Available Bikes: " + str(data["available_bikes"])
+            output.append(
+                    {
+                            'icon': icons.dots.blue,
+                            'lat': data["position"]["lat"],
+                            'lng': data["position"]["lng"],
+                            'infobox': infobox
+                    }
+                )
 
-    trdmap = Map(
-        identifier="trdmap",
-        lat=53.350140,
-        lng=-6.266155,
+        trdmap = Map(
+            identifier="trdmap",
+            lat=53.350140,
+            lng=-6.266155,
 
 	#potential extra feature - needs custom styling however...
 	#see http://flaskgooglemaps.pythonanywhere.com/ clusterd map in view
@@ -45,9 +46,9 @@ def mapview():
 	#cluster_gridsize=10,
 
 	#note: style for map is being declared here...
-	style="height:600px;width:800px;margin:auto;margin-top:20px;margin-bottom:20px;color:black;",
+            style="height:600px;width:800px;margin:auto;margin-top:20px;margin-bottom:20px;color:black;",
                
-	markers = output
+            markers = output
     )
     return render_template('index.html', trdmap=trdmap)
 
