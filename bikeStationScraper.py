@@ -15,7 +15,7 @@ while(counter<2016):
         year = str(time.gmtime().tm_year)
 
         #check of current processing filename
-        print("Station-Data-" + hour + "-" + minutes + "-" + day + "-" + month + "-" + year)
+        print(str(i) + "-Station-Data-" + hour + "-" + minutes + "-" + day + "-" + month + "-" + year)
 
         #creates or resets existing file due to write permissions - allows us to make overall array to store data
         with open("Station-Data-" + hour + "-" + minutes + "-" + day + "-" + month + "-" + year + ".json", "w") as file:
