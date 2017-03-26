@@ -4,8 +4,8 @@ import time
 
 counter = 0
 
-#timed to execute for total of 7 days (10,080 minutes @ 15mins per scrape)
-while(counter<672):
+#timed to execute for total of 7 days (10,080 minutes @ 5mins per scrape)
+while(counter<2016):
         
         #using time variables for our filenames to make them distinct - will help with database setup
         minutes = str(time.gmtime().tm_min)
@@ -43,6 +43,6 @@ while(counter<672):
         #increase counter by 1 each time
         counter+=1
                 
-        #15 minute sleep
-        time.sleep(900) 
+        #5 minute sleep
+        time.sleep(300) 
                 
