@@ -18,6 +18,7 @@ while(counter<2016):
         print("FileNum-" + str(counter) + "-" + day + "-" + month + "-" + year  + "-Station-Data-" + hour + "-" + minutes)
 
         #creates or resets existing file due to write permissions - allows us to make overall array to store data
+        with open("FileNum-" + str(counter) + "-" + day + "-" + month + "-" + year  + "-Station-Data-" + hour + "-" + minutes +".json", "w") as file:
                 file.write("[")
 
         #note we're also throwing in the station number that doesn't exist (station 50) so it's easier to get hold of
@@ -31,10 +32,12 @@ while(counter<2016):
 
                 #writes json value to file also includes comma after each value to segment the data from the next installment
                 #note this results in an extra comment at end of data but does not appear to cause error
+                with open("FileNum-" + str(counter) + "-" + day + "-" + month + "-" + year  + "-Station-Data-" + hour + "-" + minutes+ ".json","a") as file:
                     json.dump(data, file, ensure_ascii=False)
                     file.write(",")
                     
         #stops array at end of file by inserting square bracket
+        with open("FileNum-" + str(counter) + "-" + day + "-" + month + "-" + year  + "-Station-Data-" + hour + "-" + minutes +".json","a") as file:
                 file.write("]")
                 
         #increase counter by 1 each time
