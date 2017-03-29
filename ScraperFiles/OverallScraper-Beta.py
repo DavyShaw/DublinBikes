@@ -5,8 +5,8 @@ import time
 
 #importing elements from other python file
 from MySQLBasicDBSetup import accessDB as engine
-from MySQLBasicDBSetup import setupTables as tables
-#from MySQLBasicDBSetup import dbWrite
+#from MySQLBasicDBSetup import setupTables as tables #dangerous - should only use in main script to prevent accidental deletion of data
+from MySQLBasicDBSetup import dbWrite
 
 def bikesApiCall(stationnum):
         api_key = "c64916b14c557faa49fdf72b8902e4d9ff9afe35"
@@ -21,6 +21,7 @@ def  organisedBikeData(data):
                 stationLat= data.get('position').get('lat'),
                 stationLong= data.get('position').get('lng'),
                 stationStatus=  data.get('status'),
+                stationBikeStands=  data.get('bike_stands'),
                 stationAvailableStands=  data.get('available_bike_stands'),
                 stationAvailableBikes=  data.get('available_bikes'),
                 lastUpdate= data.get('last_update')
@@ -52,14 +53,17 @@ def weatherRequest(api_url): #http://codereview.stackexchange.com/questions/1313
 def organisedWeatherData(api_data):
     data = dict(
         city=api_data.get('name'),
-        country=api_data.get('sys').get('country'),
+        long=api_data.get('coord').get('lon'), #gets longitude for database
+        lat=api_data.get('coord').get('lat'), #gets latitude for database
         temp=api_data.get('main').get('temp'),
         temp_max=api_data.get('main').get('temp_max'),
         temp_min=api_data.get('main').get('temp_min'),
         humidity=api_data.get('main').get('humidity'),
         pressure=api_data.get('main').get('pressure'),
-        sky=api_data['weather'][0]['main'], #clouds?
+        sky=api_data['weather'][0]['main'], #sky conditions
+        wind=api_data.get('wind').get('speed'), #wind speed
         dt=api_data.get('dt') #daytime in weird format
+        
     )
     return data
 
@@ -117,7 +121,7 @@ if __name__ == "__main__":
         engine
         
         # WARNING - RESETS TABLES - DO NOT RUN WHILE SCRIPT IS ACTIVE ON EC2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        tables
+        #tables
         
         #initialising counter for scraper
         counter = 0
@@ -142,8 +146,9 @@ if __name__ == "__main__":
                                 station = organisedBikeData(bikeJson)
                                 weather = organisedWeatherData(weatherJson)
 
-                                #writes data to database            
-                                #dbWrite(station,weather)
+                                #writes data to database
+                                #not quite right.... returns function object has no attirbute execute error
+                                dbWrite(engine,station,weather)
 
                                 #Mimic counter to ensure script hasnt crashed - runs to 102%
                                 print(i, "%")
