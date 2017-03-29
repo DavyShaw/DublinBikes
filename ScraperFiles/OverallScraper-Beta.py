@@ -4,7 +4,7 @@ import json
 import time
 
 #importing elements from other python file
-from MySQLBasicDBSetup import accessDB as engine
+#from MySQLBasicDBSetup import accessDB
 #from MySQLBasicDBSetup import setupTables as tables #dangerous - should only use in main script to prevent accidental deletion of data
 from MySQLBasicDBSetup import dbWrite
 
@@ -117,9 +117,7 @@ def  fileBackupWeather(data):
 
 
 if __name__ == "__main__":
-        # logs into DB
-        engine
-        
+
         # WARNING - RESETS TABLES - DO NOT RUN WHILE SCRIPT IS ACTIVE ON EC2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         #tables
         
@@ -145,18 +143,20 @@ if __name__ == "__main__":
                                 #current station and weather dictionary data
                                 station = organisedBikeData(bikeJson)
                                 weather = organisedWeatherData(weatherJson)
-
+                                print (station)
+                                print (weather)
                                 #writes data to database
                                 #not quite right.... returns function object has no attirbute execute error
-                                dbWrite(engine,station,weather)
+                        
+                                dbWrite(station,weather)
 
                                 #Mimic counter to ensure script hasnt crashed - runs to 102%
                                 print(i, "%")
                         
-        #increment our counter in while loop - sentinel value
-        counter += 1
-        #5 minute sleep
-        time.sleep(300)
+                #increment our counter in while loop - sentinel value
+                counter += 1
+                #5 minute sleep
+                time.sleep(300)
 
 
                 

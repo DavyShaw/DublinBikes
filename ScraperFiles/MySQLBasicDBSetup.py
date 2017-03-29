@@ -80,7 +80,17 @@ def setupTables():
     except Exception as e:
         print(e)#, traceback.format_exc())
 
-def dbWrite(engine,station,weather):
+def dbWrite(station,weather):
+
+    #connection inside of dbWrite for self-continament of connection establishment
+    URI = "dublinbikes.cns5jzditmzn.us-west-2.rds.amazonaws.com" #link to AWS hosted RDS
+    PORT = "3306" #default port on RDS
+    DB = "dublinbikes" #simple DB name - not built for security
+    USER = "dublinbikes" # simple user name - not built for security
+    PASSWORD="dublinbikes" #simple password - not built for security
+
+    engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}".format(USER, PASSWORD, URI, PORT, DB), echo=True)
+
     
     #inserts static station data values to DB (really this only needs to be done once..... inefficient to do it each time as data doesnt change!
     sql = "INSERT INTO station VALUES (" + str(station['stationNumber']) +", '" + str(station['stationName']) + "'," + str(station['stationLat']) + "," + str(station['stationLong']) + "," + str(station['stationBikeStands']) + ");"
@@ -113,14 +123,14 @@ def dbWrite(engine,station,weather):
 
 #some test statements
         
-##station = {'stationAvailableBikes': 0, 'stationLong': -6.262287, 'stationStatus': 'OPEN', 'stationLat': 53.340962, 'lastUpdate': 1490816007000, 'stationBikeStands': 29, 'stationName': 'CHATHAM STREET', 'stationAvailableStands': 29, 'stationNumber': 1}
-##weather = {'long': -6.26, 'humidity': 82, 'sky': 'Rain', 'temp_min': 12, 'temp': 12.49, 'lat': 53.34, 'dt': 1490814000, 'city': 'Dublin', 'temp_max': 13, 'pressure': 1011, 'wind': 5.1}
+station = {'stationAvailableBikes': 0, 'stationLong': -6.262287, 'stationStatus': 'OPEN', 'stationLat': 53.340962, 'lastUpdate': 1490816007000, 'stationBikeStands': 29, 'stationName': 'CHATHAM STREET', 'stationAvailableStands': 29, 'stationNumber': 1}
+weather = {'long': -6.26, 'humidity': 82, 'sky': 'Rain', 'temp_min': 12, 'temp': 12.49, 'lat': 53.34, 'dt': 1490814000, 'city': 'Dublin', 'temp_max': 13, 'pressure': 1011, 'wind': 5.1}
 ##print(str(station['stationNumber']), station['stationName'], station['stationLat'], station['stationLong'], station['stationBikeStands']) # static bike info
 ##print(station['stationNumber'],station['stationStatus'], station['stationAvailableBikes'], station['stationAvailableStands'], station['lastUpdate']) # dynamic bike info
 ##print(str(1), weather['city'],weather['lat'], weather['long'],weather['temp'], weather['temp_max'], weather['temp_min'], weather['pressure'],  weather['wind'], weather['sky'], weather['dt'] ) # weather info
 
 ##engine=accessDB()
 ##
-##accessDB()
+##engine = accessDB()
 ##setupTables()
-##dbWrite(engine,station,weather)
+##dbWrite(station,weather)
