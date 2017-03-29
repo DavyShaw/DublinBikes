@@ -18,7 +18,8 @@ def  organisedBikeData(data):
                 stationLong= data.get('position').get('lng'),
                 stationStatus=  data.get('status'),
                 stationAvailableStands=  data.get('available_bike_stands'),
-                stationAvailableBikes=  data.get('available_bikes')
+                stationAvailableBikes=  data.get('available_bikes'),
+                lastUpdate= data.get('last_update')
         )
         return dictionaryData
 
