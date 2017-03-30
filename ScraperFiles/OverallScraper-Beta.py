@@ -1,5 +1,7 @@
 import requests
 import urllib
+from urllib.request import Request, urlopen
+from urllib.error import URLError, HTTPError
 import json
 import time
 import datetime
@@ -9,8 +11,20 @@ from MySQLBasicDBSetup import dbWrite
 
 def bikesApiCall(stationnum):
         api_key = "c64916b14c557faa49fdf72b8902e4d9ff9afe35"
-        r = requests.get("https://api.jcdecaux.com/vls/v1/stations/" + str(stationnum) + "?contract=Dublin&apiKey=" + api_key)
-        data = r.json()
+        url = urllib.request.Request("https://api.jcdecaux.com/vls/v1/stations/" + str(stationnum) + "?contract=Dublin&apiKey=" + api_key)
+        try:
+                urllib.request.urlopen(url)
+        except HTTPError as e:
+                #if http error were going to return an ERROR string
+                data = "ERROR"
+                #if server error were going to return an ERROR string
+        except URLError as e:
+                data = "ERROR"
+        else:
+                url = urllib.request.urlopen(url)
+                output = url.read().decode('utf-8')
+                data = json.loads(output)
+                url.close()
         return data
 
 def  organisedBikeData(data):
@@ -49,10 +63,25 @@ def weatherApiCall(lat,long): #Part of code taken from: https://straymarcs.net/2
         return api_url
 
 def weatherRequest(api_url): #http://codereview.stackexchange.com/questions/131371/script-to-print-weather-report-from-openweathermap-api
-        url = urllib.request.urlopen(api_url)
-        output = url.read().decode('utf-8')
-        api_data = json.loads(output)
-        url.close()
+        #security precaution - making sure the link is valid!
+        #checks both if the HTTP address is valid and if the Server is responding correctly
+        #if the server is broken we return a string that is checked in our main execution of the program
+        url = urllib.request.Request(api_url)
+        try:
+                urllib.request.urlopen(url)
+        except HTTPError as e:
+                #if http error were going to return an ERROR string
+                api_date = "ERROR"
+                #if server error were going to return an ERROR string
+        except URLError as e:
+                api_date = "ERROR"
+        else:
+                #if the link works program executes this code:
+                url = urllib.request.urlopen(api_url)
+                output = url.read().decode('utf-8')
+                api_data = json.loads(output)
+                url.close()
+
         return api_data
 
 def organisedWeatherData(api_data):
@@ -127,18 +156,21 @@ if __name__ == "__main__":
                                 #using variables for easier readability
                                 bikeJson = bikesApiCall(i)
                                 weatherJson = weatherRequest(weatherApiCall(latValues(bikesApiCall(i)), longValues(bikesApiCall(i))))
-                                                             
-                                #writes jsondata to file as backup in event some weird error occurs
-                                #not quite right - this rewrites the file each time i is rechecked...
-                                fileBackupBikes(bikeJson,minutes,hour,day,month,year)
-                                fileBackupWeather(weatherJson,minutes,hour,day,month,year)
-                                
-                                #current station and weather dictionary data
-                                station = organisedBikeData(bikeJson)
-                                weather = organisedWeatherData(weatherJson)
-                              
-                                #writes data to database
-                                dbWrite(station,weather)
+
+                                #if our weather or bike json calls return an error then we are going to skip this round and move on...
+                                if weatherJson != "ERROR" and bikeJson != "ERROR":
+                                        
+                                        #writes jsondata to file as backup in event some weird error occurs
+                                        #not quite right - this rewrites the file each time i is rechecked...
+                                        fileBackupBikes(bikeJson,minutes,hour,day,month,year)
+                                        fileBackupWeather(weatherJson,minutes,hour,day,month,year)
+                                        
+                                        #current station and weather dictionary data
+                                        station = organisedBikeData(bikeJson)
+                                        weather = organisedWeatherData(weatherJson)
+                                      
+                                        #writes data to database
+                                        dbWrite(station,weather)
 
                                 #Mimic counter to ensure script hasnt crashed during a processed run - runs to 102%
                                 print(i, "%")
@@ -152,8 +184,13 @@ if __name__ == "__main__":
                         file.write("]")
 
                 print("Finished loop: " + str(counter) + "/2016")
+                
                 #increment our counter in while loop - sentinel value
+                #note this is approximate as the scraping takes a couple minutes each turn
+                #most likely a manual close of the script will be needed however this is a built in cut off
+                #in the event the code is forgotten to be manually switched off it will terimate after 2016 loops
                 counter += 1
+                
                 #5 minute sleep
                 time.sleep(300)
 
