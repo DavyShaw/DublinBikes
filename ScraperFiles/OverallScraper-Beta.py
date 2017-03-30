@@ -29,8 +29,12 @@ def bikesApiCall(stationnum):
 
 def  organisedBikeData(data):
         
-        #note: code translates time since epoch
-        y = int(data.get('last_update'))
+        #note: code translates time since epoch (milliseconds)
+        #ec2 instance app runs on does not have correct time set due to daylight savings
+        #adding an hour in seconds to epoch time
+        
+        daylightsavings= 3600000
+        y = int(data.get('last_update') + daylightsavings)
         x = time.gmtime(y/1000)
         timeUpdate = str(time.strftime('%d-%m-%Y-%H:%M:%S', x))
         
@@ -85,8 +89,11 @@ def weatherRequest(api_url): #http://codereview.stackexchange.com/questions/1313
         return api_data
 
 def organisedWeatherData(api_data):
-        #note: code translates unix time format
-        unix_timestamp  = int(api_data.get('dt'))
+        #note: code translates unix time format (seconds)
+        #adding daylights savings due to ec2 settings
+        
+        daylightsavings= 3600
+        unix_timestamp  = int(api_data.get('dt') + daylightsavings)
         timeUpdate = str(datetime.datetime.utcfromtimestamp(unix_timestamp).strftime('%d-%m-%Y-%H:%M:%S'))
         
         data = dict(
@@ -182,14 +189,14 @@ if __name__ == "__main__":
                 #stops array at end of file by inserting square bracket
                 with open("FileNum-" + str(counter) + "-" + day + "-" + month + "-" + year  + "-Weather-Data-" + hour + "-" + minutes +".json","a") as file:
                         file.write("]")
-
-                print("Finished loop: " + str(counter) + "/2016")
                 
                 #increment our counter in while loop - sentinel value
                 #note this is approximate as the scraping takes a couple minutes each turn
                 #most likely a manual close of the script will be needed however this is a built in cut off
                 #in the event the code is forgotten to be manually switched off it will terimate after 2016 loops
                 counter += 1
+
+                print("Finished loop: " + str(counter) + "/2016")
                 
                 #5 minute sleep
                 time.sleep(300)
