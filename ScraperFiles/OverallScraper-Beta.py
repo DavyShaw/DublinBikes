@@ -75,10 +75,10 @@ def weatherRequest(api_url): #http://codereview.stackexchange.com/questions/1313
                 urllib.request.urlopen(url)
         except HTTPError as e:
                 #if http error were going to return an ERROR string
-                api_date = "ERROR"
+                api_data = "ERROR" #typo here saying api_date caused issues!
                 #if server error were going to return an ERROR string
         except URLError as e:
-                api_date = "ERROR"
+                api_data = "ERROR" #typo here saying api_date caused issues!
         else:
                 #if the link works program executes this code:
                 url = urllib.request.urlopen(api_url)
