@@ -60,6 +60,7 @@ def setupTables():
     sql = """
     CREATE TABLE IF NOT EXISTS weather (
     correspondingstationnum INT,
+    correspondingstationtime VARCHAR(256),
     lat REAL,
     lng REAL,
     temp REAL,
@@ -111,7 +112,7 @@ def dbWrite(station,weather):
 
     #inserts weather  data values to DB - note need to reformat time variable as too large for database...
     #including corresponding station number to allow easy association between datasets
-    sql = "INSERT INTO weather VALUES (" + str(station['stationNumber']) + "," + str(weather['lat']) +", " + str(weather['long']) +", " + str(weather['temp']) +", " + str( weather['temp_max']) +", " + str(weather['temp_min']) +", " + str(weather['pressure']) +", " + str(weather['humidity']) +", "+ str(weather['wind']) +", '" + str(weather['sky']) +"', ' " + str( weather['dt']) + "');"
+    sql = "INSERT INTO weather VALUES (" + str(station['stationNumber']) + ", '" + str(station['lastUpdate'])  + "'," + str(weather['lat']) +", " + str(weather['long']) +", " + str(weather['temp']) +", " + str( weather['temp_max']) +", " + str(weather['temp_min']) +", " + str(weather['pressure']) +", " + str(weather['humidity']) +", "+ str(weather['wind']) +", '" + str(weather['sky']) +"', ' " + str( weather['dt']) + "');"
     
     try:
         res = engine.execute(sql)
