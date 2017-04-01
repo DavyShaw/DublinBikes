@@ -20,6 +20,9 @@ def bikesApiCall(stationnum):
                 #if server error were going to return an ERROR string
         except URLError as e:
                 data = "ERROR"
+                #extra socket error check as this crashed weather api
+        except socket.error as e:
+                data = "ERROR"
         else:
                 url = urllib.request.urlopen(url)
                 output = url.read().decode('utf-8')
@@ -79,6 +82,9 @@ def weatherRequest(api_url): #http://codereview.stackexchange.com/questions/1313
                 #if server error were going to return an ERROR string
         except URLError as e:
                 api_data = "ERROR" #typo here saying api_date caused issues!
+        #extra socket error check as this crashed weather api
+        except socket.error as e:
+                data = "ERROR"
         else:
                 #if the link works program executes this code:
                 url = urllib.request.urlopen(api_url)
@@ -164,8 +170,22 @@ if __name__ == "__main__":
                                 bikeJson = bikesApiCall(i)
                                 weatherJson = weatherRequest(weatherApiCall(latValues(bikesApiCall(i)), longValues(bikesApiCall(i))))
 
-                                #if our weather or bike json calls return an error then we are going to skip this round and move on...
-                                if weatherJson != "ERROR" and bikeJson != "ERROR":
+                                #special case accounts for if the weather data is broke but bike data is fine
+                                if weatherJson == "ERROR" and bikeJson != "ERROR":
+                                        
+                                        #writes jsondata to file as backup in event some weird error occurs
+                                        #not quite right - this rewrites the file each time i is rechecked...
+                                        fileBackupBikes(bikeJson,minutes,hour,day,month,year)
+                                        
+                                        #current station and weather dictionary data
+                                        station = organisedBikeData(bikeJson)
+                                      
+                                        #writes data to database
+                                        dbWriteSingle(station)
+
+
+                                #special case if both json data sets work (note: no case for if weather only works as that data is redundant)
+                                elif weatherJson != "ERROR" and bikeJson != "ERROR":
                                         
                                         #writes jsondata to file as backup in event some weird error occurs
                                         #not quite right - this rewrites the file each time i is rechecked...
@@ -178,6 +198,8 @@ if __name__ == "__main__":
                                       
                                         #writes data to database
                                         dbWrite(station,weather)
+
+
 
                                 #Mimic counter to ensure script hasnt crashed during a processed run - runs to 102%
                                 print(i, "%")
