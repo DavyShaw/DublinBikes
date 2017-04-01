@@ -8,6 +8,7 @@ import datetime
 
 #importing elements from other python file
 from MySQLBasicDBSetup import dbWrite
+from MySQLBasicDBSetup import dbWrite2
 
 def bikesApiCall(stationnum):
         api_key = "c64916b14c557faa49fdf72b8902e4d9ff9afe35"
