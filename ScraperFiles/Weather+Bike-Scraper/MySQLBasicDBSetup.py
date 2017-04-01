@@ -121,6 +121,36 @@ def dbWrite(station,weather):
         print(e)
 
 
+def dbWrite2(station):
+
+    #connection inside of dbWrite for self-continament of connection establishment - easier to implement
+    URI = "dublinbikes.cns5jzditmzn.us-west-2.rds.amazonaws.com" #link to AWS hosted RDS
+    PORT = "3306" #default port on RDS
+    DB = "dublinbikes" #simple DB name - not built for security
+    USER = "dublinbikes" # simple user name - not built for security
+    PASSWORD="dublinbikes" #simple password - not built for security
+
+    engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}".format(USER, PASSWORD, URI, PORT, DB), echo=True)
+    
+    #inserts static station data values to DB (really this only needs to be done once..... inefficient to do it each time as data doesnt change!
+    sql = "INSERT INTO station VALUES (" + str(station['stationNumber']) +", '" + str(station['stationName']) + "'," + str(station['stationLat']) + "," + str(station['stationLong']) + "," + str(station['stationBikeStands']) + ");"
+    
+    try:
+        res = engine.execute(sql)
+        #print(res.fetchall())
+    except Exception as e:
+        print(e)
+
+    #inserts dynamic station data values to DB - note need to reformat time variable as too large for database...
+    sql = "INSERT INTO availability VALUES (" + str(station['stationNumber']) +", '" + str(station['stationStatus']) + "'," + str(station['stationAvailableBikes']) + "," + str(station['stationAvailableStands']) + ", '" + str(station['lastUpdate']) + "');"
+    
+    try:
+        res = engine.execute(sql)
+        #print(res.fetchall())
+    except Exception as e:
+        print(e)
+
+
 if __name__ == "__main__":
     #accesses DB and sets up tables (clears them if they already exist so be careful)
     #autoruns when executed from other python file
