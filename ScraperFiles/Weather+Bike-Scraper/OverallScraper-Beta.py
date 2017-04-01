@@ -182,7 +182,7 @@ if __name__ == "__main__":
                                         station = organisedBikeData(bikeJson)
                                       
                                         #writes data to database
-                                        dbWriteSingle(station)
+                                        dbWrite2(station)
 
 
                                 #special case if both json data sets work (note: no case for if weather only works as that data is redundant)
