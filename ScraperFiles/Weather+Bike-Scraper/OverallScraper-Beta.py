@@ -85,7 +85,7 @@ def weatherRequest(api_url): #http://codereview.stackexchange.com/questions/1313
                 api_data = "ERROR" #typo here saying api_date caused issues!
         #extra socket error check as this crashed weather api
         except socket.error as e:
-                data = "ERROR"
+                api_data = "ERROR"
         else:
                 #if the link works program executes this code:
                 url = urllib.request.urlopen(api_url)
