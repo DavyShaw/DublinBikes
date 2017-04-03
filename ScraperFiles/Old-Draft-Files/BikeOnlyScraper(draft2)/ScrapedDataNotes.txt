@@ -1,0 +1,7 @@
+Scrape Started
+01/04/17 - 20:27pm
+Scrape Crashed
+03/04/17 - 03.36am
+
+Scrape Restarted
+03/04/17 - 11:29am
