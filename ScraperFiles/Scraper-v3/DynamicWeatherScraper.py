@@ -152,7 +152,8 @@ if __name__ == "__main__":
     engine=DbConnect()
 
     #sets up or resets station database if it already exists
-    setupTables()
+    #commented out as DB has been setup - do not run again unless want to erase and reset DB
+    #setupTables()
 
     #initialise our counter as we will be gathering data every x number of times
     counter = 0

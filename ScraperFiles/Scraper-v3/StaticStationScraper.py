@@ -122,7 +122,8 @@ if __name__ == "__main__":
     engine=DbConnect()
 
     #sets up or resets station database if it already exists
-    setupTables()
+    #commented out as DB has been setup
+    #setupTables()
 
     #using variables for easier readability
     bikeJson = staticApiCall()
