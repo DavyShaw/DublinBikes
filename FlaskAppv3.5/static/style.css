@@ -20,6 +20,11 @@ footer{
     width:80%;
 }
 
+body h1,h2,h3{
+    text-align:center;
+    font-style:italic;
+}
+
 #weather{
     background-color: white;
     color: black;
@@ -30,9 +35,10 @@ footer{
     margin-bottom: 20px;
     display: inline-block;
     padding: 20px;
+    border-radius: 25px;
 }
 
-#historic{
+#historicwrapper{
     background-color: white;
     color: black;
     width: 30%;
@@ -41,4 +47,12 @@ footer{
     margin-right: 50px;
     display: none;
     padding: 20px;
+    border-radius: 25px;
+}
+
+#historic{
+    background-color: white;
+    color: black;
+    overflow: hidden;
+    display: inline-block;
 }

@@ -21,9 +21,12 @@
 
 <div id="map">{{trdmap.html}}</div>
 
-<div id="weather"><h2>Current Weather in Dublin:</h2></div>
+<div id="weather"><h2>Current Weather in Dublin</h2></div>
 
-<div id="historic"></div>
+<div id="historicwrapper">
+    <div id="historic"></div>
+    <div id="averagechart"></div>
+</div>
 
 <footer>
 <p>Developed by SDD - Software Design & Development</p>
@@ -139,17 +142,12 @@
         
     sunday = Math.round(sunday/285);
         
-    document.getElementById('historic').style.display = "inline-block";
+    document.getElementById('historicwrapper').style.display = "inline-block";
     console.log("Button Pressed Test - Station Name: " + stationName);
-    document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" 
-        + "<p>" + "Average Available Bikes (Monday): " + String(monday) + "</p>" 
-        + "<p>" + "Average Available Bikes (Tuesday): " + String(tuesday) + "</p>" 
-        + "<p>" + "Average Available Bikes (Wednesday): " + String(wednesday) + "</p>" 
-        + "<p>" + "Average Available Bikes (Thursday): " + String(thursday) + "</p>" 
-        + "<p>" + "Average Available Bikes (Friday): " + String(friday) + "</p>" 
-        + "<p>" + "Average Available Bikes (Saturday): " + String(saturday) + "</p>" 
-        + "<p>" + "Average Available Bikes (Sunday): " + String(sunday) + "</p>" ;
-
+        
+    document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>";
+    google.charts.setOnLoadCallback(drawChart(monday,tuesday,wednesday,thursday,friday,saturday,sunday));
+        
     }) 
     
     .done(function(){
@@ -165,10 +163,40 @@
     });
 
 }
-
     
 </script>
 
+    
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+      
+
+    function drawChart(mon,tues,weds,thurs,fri,sat,sun) {
+        var data = google.visualization.arrayToDataTable([
+          ['Day', 'Bikes Available'],
+          ['Mon',  mon],
+          ['Tues',  tues],
+          ['Weds',  weds],
+          ['Thurs',  thurs],
+          ['Fri',  thurs],
+          ['Sat',  thurs],
+          ['Sun',  thurs]
+        ]);
+
+        var options = {
+          title: 'Average Number of Bike Available',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+    var chart = new google.visualization.LineChart(document.getElementById('averagechart'));
+
+    chart.draw(data, options);
+    }
+    
+</script>
+    
     
 </body>
 </html>
