@@ -38,10 +38,19 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script type="text/javascript">
     
-    var jqxhr = $.getJSON("http://localhost:5000/station/" + "42", function(){
-    
+   function showDiv(stationName,stationNumber) {
+   
+    var jqxhr = $.getJSON("http://localhost:5000/station/" + stationNumber, function(){
+    console.log("http://localhost:5000/station/" + stationNumber);    
+
     console.log("success");
-    //document.getElementById('historic').innerHTML = "<h2>Historic Data for 42</h2> " + "<p>" + jqxhr + "</p>";
+    var response = jqxhr;
+    var jsonObject = response; //JSON.parse(response);
+    //var myResponseResult = jqxhr;
+
+    document.getElementById('historic').style.display = "inline-block";
+    console.log("Button Pressed Test - Station Name: " + stationName);
+    document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + JSON.stringify(jsonObject) + "</p>";
 
     }) 
     
@@ -56,18 +65,9 @@
     .always(function(){
         console.log("complete");
     });
-    
-    
-    function showDiv(stationName,stationNumber) {
-   var response = jqxhr;
-   var jsonObject = response; //JSON.parse(response);
-   //var myResponseResult = jqxhr;
-
-   document.getElementById('historic').style.display = "inline-block";
-   console.log("Button Pressed Test - Station Name: " + stationName);1
-   document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + JSON.stringify(jsonObject) + "</p>";
 
 }
+
     
 </script>
 
