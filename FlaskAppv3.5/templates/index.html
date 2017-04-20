@@ -28,8 +28,8 @@
    //var jsonObject = JSON.parse(response);
    //var myResponseResult = jsonObject.available_bikes
 
-   //document.getElementById('historic').style.display = "inline-block";
-   //console.log("Button Pressed Test - Station Name: " + stationName);
+   document.getElementById('historic').style.display = "inline-block";
+   console.log("Button Pressed Test - Station Name: " + stationName);
    //document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + stationJSON + "</p>";
 //} 
 
@@ -59,14 +59,13 @@
     
     
     function showDiv(stationName,stationNumber) {
-    window.stationNo = stationNumber;
    var response = jqxhr;
-   var jsonObject = response; #JSON.parse(response);
+   var jsonObject = response; //JSON.parse(response);
    //var myResponseResult = jqxhr;
 
    document.getElementById('historic').style.display = "inline-block";
-   console.log("Button Pressed Test - Station Name: " + stationName);
-   document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + JSON.stringify(jsonObject.data[0]) + "</p>";
+   console.log("Button Pressed Test - Station Name: " + stationName);1
+   document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + JSON.stringify(jsonObject) + "</p>";
 
 }
     
