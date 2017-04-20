@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<link rel = "stylesheet"
+      type = "text/css"
+        href = "/static/style.css" />
+
+<title>Bike Tracker</title>  
+{{trdmap.js}}
+</head>
+
+
+<body>
+
+<header>
+<h1>Dublin Bikes Tracker</h1>
+</header>
+
+<div id="map">{{trdmap.html}}</div>
+
+<div id="historic"></div>
+
+<!--<script>
+
+//function showDiv(stationName,stationJSON) {
+   //var response = stationJSON;
+   //var jsonObject = JSON.parse(response);
+   //var myResponseResult = jsonObject.available_bikes
+
+   //document.getElementById('historic').style.display = "inline-block";
+   //console.log("Button Pressed Test - Station Name: " + stationName);
+   //document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + stationJSON + "</p>";
+//} 
+
+//</script>-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script type="text/javascript">
+    
+    var jqxhr = $.getJSON("http://localhost:5000/station/" + "42", function(){
+    
+    console.log("success");
+    //document.getElementById('historic').innerHTML = "<h2>Historic Data for 42</h2> " + "<p>" + jqxhr + "</p>";
+
+    }) 
+    
+    .done(function(){
+        console.log("second success");
+    })
+    
+    .fail(function(){
+          console.log("error");
+    })
+    
+    .always(function(){
+        console.log("complete");
+    });
+    
+    
+    function showDiv(stationName,stationNumber) {
+    window.stationNo = stationNumber;
+   var response = jqxhr;
+   var jsonObject = response; #JSON.parse(response);
+   //var myResponseResult = jqxhr;
+
+   document.getElementById('historic').style.display = "inline-block";
+   console.log("Button Pressed Test - Station Name: " + stationName);
+   document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + JSON.stringify(jsonObject.data[0]) + "</p>";
+
+}
+    
+</script>
+
+    
+</body>
+</html>
