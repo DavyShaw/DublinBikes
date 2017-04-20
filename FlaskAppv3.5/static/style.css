@@ -1,9 +1,9 @@
 body{
-    background-color: black;
-    color: white;
+    background-color: #114D57;
+    color: black;
 }
 
-header h1{
+header{
     color: #008080;
     margin: auto;
     padding: 20px;
@@ -11,15 +11,34 @@ header h1{
     margin-bottom: 2%;
 }
 
+footer{
+    color: #008080;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 2%;
+    width:80%;
+}
+
+#weather{
+    background-color: white;
+    color: black;
+    width: 30%;
+    overflow: hidden;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 20px;
+    display: inline-block;
+    padding: 20px;
+}
+
 #historic{
-    background-color: #008080;
-    opacity: 0.3;
-    color: white;
+    background-color: white;
+    color: black;
     width: 30%;
     overflow: hidden;
     margin-left: 50px;
     margin-right: 50px;
     display: none;
     padding: 20px;
-    box-shadow: 10px 10px 5px #888888;
 }

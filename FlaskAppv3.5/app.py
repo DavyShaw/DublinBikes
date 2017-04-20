@@ -87,7 +87,7 @@ def mapview():
 	#cluster_gridsize=10,
 
 	#note: style for map is being declared here...
-            style="height:600px;width:800px;margin-left:50px;margin-right:50px;color:black;float:left;display:inline-block;box-shadow: 10px 10px 5px #888888",
+            style="height:600px;width:800px;margin-left:50px;margin-right:50px;color:black;float:left;display:inline-block",
                
             markers = output
     )
@@ -99,15 +99,14 @@ def mapview():
 
 @app.route('/station/<int:station_id>')
 def station(station_id):
-    sql = """
-    SELECT available_bikes, available_bike_stands,last_update from stationDynamic where number = {}
-    """.format(station_id)
+    sql = """SELECT available_bikes, available_bike_stands,last_update from stationDynamic where number = {}""".format(station_id)
     
     engine = get_db()
     rows = engine.execute(sql).fetchall()  # we use fetchall(), but probably there is only one station
     res = [dict(row.items()) for row in rows]  # use this formula to turn the rows into a list of dicts
     data = jsonify(data=res)  # jsonify turns the objects into the correct respose
     #print(data)
+    #jdata = json.dumps(res)
     return data #.get_data(as_text=True) #returns as string?
 
 if __name__ == "__main__":

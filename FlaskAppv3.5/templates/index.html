@@ -14,12 +14,21 @@
 <body>
 
 <header>
-<h1>Dublin Bikes Tracker</h1>
+<img src="/static/DublinBikes.jpg"/>
 </header>
+
+
 
 <div id="map">{{trdmap.html}}</div>
 
+<div id="weather"><h2>Current Weather in Dublin:</h2></div>
+
 <div id="historic"></div>
+
+<footer>
+<p>Developed by SDD - Software Design & Development</p>
+</footer>
+
 
 <!--<script>
 
@@ -40,17 +49,106 @@
     
    function showDiv(stationName,stationNumber) {
    
-    var jqxhr = $.getJSON("http://localhost:5000/station/" + stationNumber, function(){
+    var jqxhr = $.getJSON("http://localhost:5000/station/" + stationNumber, function(data){
     console.log("http://localhost:5000/station/" + stationNumber);    
 
     console.log("success");
-    var response = jqxhr;
-    var jsonObject = response; //JSON.parse(response);
-    //var myResponseResult = jqxhr;
 
+    var availableBikes = data.data[0].available_bikes;
+    var availableBikeStands = data.data[0].available_bike_stands;
+    var lastUpdate = data.data[0].last_update;
+    
+    var monday = 0;
+    var tuesday = 0;
+    var wednesday = 0;
+    var thursday = 0;
+    var friday = 0;
+    var saturday = 0;
+    var sunday = 0;
+    
+    //for each day we cycle from 0 up to the cut off value for that specific day using an SQL query
+    //attempting to code into python being sent here however caused issues
+    //sample sql query used in workbench to calculate the ranges:
+        
+    //for (var SELECT COUNT(*)
+    //from dublinbikes.stationDynamic 
+    //where number = 5 AND last_update LIKE '03-04-2017%'i=0; i < 2016; i++) 
+        
+    //these values let us check the limit of the first day in the database
+    //we then start at the next day after the end limit of the day before up to that number + the new count value
+        
+    //monday
+    for (var i=0; i < 11; i++)   
+    {    
+        monday += parseInt(JSON.stringify(data.data[i].available_bikes));
+    }
+        
+    monday = Math.round(monday/11); //dividng by total number of values to get average
+        
+        
+    //tuesday    
+    for (var i=11; i < 299; i++)   
+    {    
+        tuesday += parseInt(JSON.stringify(data.data[i].available_bikes));
+    }
+        
+    tuesday = Math.round(tuesday/287);
+        
+        
+    //wednesday
+    for (var i=299; i < 585; i++)   
+    {    
+        wednesday += parseInt(JSON.stringify(data.data[i].available_bikes));
+    }
+        
+    wednesday = Math.round(wednesday/287);
+        
+        
+    //thursday 
+    for (var i=585; i < 868; i++)   
+    {    
+        thursday += parseInt(JSON.stringify(data.data[i].available_bikes));
+    }
+        
+    thursday = Math.round(thursday/283);
+        
+        
+    //friday  
+    for (var i=868; i < 1154; i++)   
+    {    
+        friday += parseInt(JSON.stringify(data.data[i].available_bikes));
+    }
+        
+    friday = Math.round(friday/286);
+        
+        
+    //saturday
+    for (var i=1154; i < 1440; i++)   
+    {    
+        saturday += parseInt(JSON.stringify(data.data[i].available_bikes));
+    }
+        
+    saturday = Math.round(saturday/286);
+        
+        
+    //sunday
+    for (var i=1440; i < 1725; i++)   
+    {    
+        sunday += parseInt(JSON.stringify(data.data[i].available_bikes));
+    }
+        
+    sunday = Math.round(sunday/285);
+        
     document.getElementById('historic').style.display = "inline-block";
     console.log("Button Pressed Test - Station Name: " + stationName);
-    document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + JSON.stringify(jsonObject) + "</p>";
+    document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" 
+        + "<p>" + "Average Available Bikes (Monday): " + String(monday) + "</p>" 
+        + "<p>" + "Average Available Bikes (Tuesday): " + String(tuesday) + "</p>" 
+        + "<p>" + "Average Available Bikes (Wednesday): " + String(wednesday) + "</p>" 
+        + "<p>" + "Average Available Bikes (Thursday): " + String(thursday) + "</p>" 
+        + "<p>" + "Average Available Bikes (Friday): " + String(friday) + "</p>" 
+        + "<p>" + "Average Available Bikes (Saturday): " + String(saturday) + "</p>" 
+        + "<p>" + "Average Available Bikes (Sunday): " + String(sunday) + "</p>" ;
 
     }) 
     
