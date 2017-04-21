@@ -11,7 +11,7 @@
 </head>
 
 
-<body>
+<body onload="api()">
 
 <header>
 <img src="/static/DublinBikes.jpg"/>
@@ -33,6 +33,27 @@
 </footer>
 
 
+<script type="text/javascript">
+    function api(){
+        var api_key = '44b78ac274e9d94337e6620489fdcdbe';
+        
+        var url = $.getJSON("http://api.openweathermap.org/data/2.5/weather?q=Dublin,IE&units=metric&APPID=" + api_key, function(data){
+
+        console.log("success");
+            
+    document.getElementById("weather").style.display = "inline-block";
+    document.getElementById("weather").innerHTML = '<p>' + "Temperature: " + data.main.temp + '&deg;C' + '</p>'
+        + '<p>' + "Max Temperature: " + data.main.temp_max + '&deg;C' + '</p>'
+            + '<p>' + "Min Temperature: " + data.main.temp_min + '&deg;C' + '</p>'
+                + '<p>' + "Pressure: " + data.main.pressure + '</p>'
+                    + '<p>' + "Humidity: " + data.main.humidity + '%' + '</p>' 
+                        + '<p>' + "Wind Speed: " + data.wind.speed + 'km/h' + '</p>' 
+                            + '<p>' + data['weather'][0]['main'] + '</p>'             
+                                + '<p>' + "<img src=\"http://openweathermap.org/img/w/" + data.weather[0].icon + ".png\">" + '</p>';
+    })
+}
+</script> 
+    
 <!--<script>
 
 //function showDiv(stationName,stationJSON) {
