@@ -21,11 +21,12 @@
 
 <div id="map">{{trdmap.html}}</div>
 
-<div id="weather"><h2>Current Weather in Dublin</h2></div>
+<div id="weather"></div>
 
 <div id="historicwrapper">
     <div id="historic"></div>
     <div id="averagechart"></div>
+    <div id="weeklybikes"></div>
 </div>
 
 <footer>
@@ -33,6 +34,7 @@
 </footer>
 
 
+<!-- code for weather data -->
 <script type="text/javascript">
     function api(){
         var api_key = '44b78ac274e9d94337e6620489fdcdbe';
@@ -42,14 +44,11 @@
         console.log("success");
             
     document.getElementById("weather").style.display = "inline-block";
-    document.getElementById("weather").innerHTML = '<p>' + "Temperature: " + data.main.temp + '&deg;C' + '</p>'
-        + '<p>' + "Max Temperature: " + data.main.temp_max + '&deg;C' + '</p>'
-            + '<p>' + "Min Temperature: " + data.main.temp_min + '&deg;C' + '</p>'
-                + '<p>' + "Pressure: " + data.main.pressure + '</p>'
-                    + '<p>' + "Humidity: " + data.main.humidity + '%' + '</p>' 
-                        + '<p>' + "Wind Speed: " + data.wind.speed + 'km/h' + '</p>' 
-                            + '<p>' + data['weather'][0]['main'] + '</p>'             
-                                + '<p>' + "<img src=\"http://openweathermap.org/img/w/" + data.weather[0].icon + ".png\">" + '</p>';
+    document.getElementById("weather").innerHTML = '<h1>Current Weather in Dublin</h1>' + 
+        '<p>' + "Temperature: " + data.main.temp + '&deg;C' + '</p>'
+        + '<p>' + "Humidity: " + data.main.humidity + '%' + '</p>' 
+        + '<p>' + "Wind Speed: " + data.wind.speed + 'km/h' + '</p>'         
+        + '<p>' + "<img src=\"http://openweathermap.org/img/w/" + data.weather[0].icon + ".png\">" + '</p>';
     })
 }
 </script> 
@@ -101,13 +100,14 @@
     //these values let us check the limit of the first day in the database
     //we then start at the next day after the end limit of the day before up to that number + the new count value
         
-    //monday
-    for (var i=0; i < 11; i++)   
+    //monday note: scraper ran from monday 3rd april at 11pm - as only 11 scrapes on the 3rd April using 10th april info instead
+    for (var i=1725; i < 2012; i++)   
     {    
         monday += parseInt(JSON.stringify(data.data[i].available_bikes));
     }
         
-    monday = Math.round(monday/11); //dividng by total number of values to get average
+    monday = Math.round(monday/286); //dividing by total number of values to get average
+        
         
         
     //tuesday    
@@ -162,12 +162,25 @@
     }
         
     sunday = Math.round(sunday/285);
+    
+    //setting up variables for second graph - total weekly bike usage
+    var totalAvailableBikes = (monday+tuesday+wednesday+thursday+friday+saturday+sunday); //note: average statistics
+    var totalAvailableStations = 0; //note: average statistics
+        
+    for (var i=11; i < 2012; i++)   
+    {    
+        totalAvailableStations += parseInt(JSON.stringify(data.data[i].available_bike_stands));
+    }
+    
+    totalAvailableStations = totalAvailableStations/2001;
         
     document.getElementById('historicwrapper').style.display = "inline-block";
     console.log("Button Pressed Test - Station Name: " + stationName);
         
-    document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>";
+    document.getElementById('historic').innerHTML = "<h1>Historic Data</h1>" + "<p>Station Name: " + stationName + "</p>";
     google.charts.setOnLoadCallback(drawChart(monday,tuesday,wednesday,thursday,friday,saturday,sunday));
+    google.charts.setOnLoadCallback(drawChart2(totalAvailableBikes,totalAvailableStations));
+      
         
     }) 
     
@@ -187,7 +200,9 @@
     
 </script>
 
+
     
+<!-- script for google visualisation 1 -->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart']});
@@ -215,6 +230,31 @@
 
     chart.draw(data, options);
     }
+    
+</script>
+    
+<!-- script for google visualisation 2 -->
+<script type="text/javascript">
+        
+      google.charts.load("current", {packages:["corechart"]});
+      
+    
+        
+      function drawChart2(testVariable) {
+        var data2 = google.visualization.arrayToDataTable([
+          ['Bikes', 'Average Number'],
+          ['Average Available Bikes', testVariable],
+          ['Average Available Stands', 10]
+        ]);
+
+        var options2 = {
+          title: 'Average Weekly Bike Availability',
+          pieHole: 0.4,
+        };
+
+        var chart2 = new google.visualization.PieChart(document.getElementById('weeklybikes'));
+        chart2.draw(data2, options2);
+      }
     
 </script>
     

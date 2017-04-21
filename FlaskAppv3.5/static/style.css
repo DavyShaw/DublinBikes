@@ -1,9 +1,9 @@
 body{
-    background-color: #114D57;
     color: black;
 }
 
 header{
+    background-color: #114D57;
     color: #008080;
     margin: auto;
     padding: 20px;
@@ -20,9 +20,14 @@ footer{
     width:80%;
 }
 
-body h1,h2,h3{
-    text-align:center;
-    font-style:italic;
+@font-face {
+   font-family: colaFont;
+   src: url(/static/LOKICOLA.ttf);
+}
+
+h1,h2,h3 {
+   font-family: colaFont;
+   text-align:center;
 }
 
 #weather{
@@ -36,6 +41,9 @@ body h1,h2,h3{
     display: inline-block;
     padding: 20px;
     border-radius: 25px;
+    border-style: groove;
+    border-color: light-blue;
+    text-align:center;
 }
 
 #historicwrapper{
@@ -45,14 +53,27 @@ body h1,h2,h3{
     overflow: hidden;
     margin-left: 50px;
     margin-right: 50px;
+    margin-bottom: 20px;
     display: none;
     padding: 20px;
     border-radius: 25px;
+    border-style: groove; 
+    border-color: light-blue;
+    text-align:center;
 }
 
 #historic{
     background-color: white;
     color: black;
     overflow: hidden;
-    display: inline-block;
+    margin-bottom:20px;
+    margin:auto;
+    padding:20px;
+    border-radius: 25px;
+    border-style: groove;
+    border-color: light-blue;
+}
+
+#historic p{
+    text-align:center;
 }
