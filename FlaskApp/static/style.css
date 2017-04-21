@@ -22,8 +22,9 @@ footer{
 
 @font-face {
    font-family: colaFont;
-   src: url('../static/LOKICOLA.ttf');
+   src: url('LOKICOLA.ttf');
 }
+
 
 h1,h2,h3 {
    font-family: colaFont;

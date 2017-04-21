@@ -52,27 +52,14 @@
     })
 }
 </script> 
-    
-<!--<script>
 
-//function showDiv(stationName,stationJSON) {
-   //var response = stationJSON;
-   //var jsonObject = JSON.parse(response);
-   //var myResponseResult = jsonObject.available_bikes
-
-   document.getElementById('historic').style.display = "inline-block";
-   console.log("Button Pressed Test - Station Name: " + stationName);
-   //document.getElementById('historic').innerHTML = "<h2>Historic Data for " + stationName + "</h2>" + "<p>" + stationJSON + "</p>";
-//} 
-
-//</script>-->
-
+<!-- code for showing div and displaying all the main chart data -->    
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 <script type="text/javascript">
     
    function showDiv(stationName,stationNumber) {
     
-    //note: this link is hardcoded! when running through apache 2 you need http://IP:80/station/ or simply http://IP/station
+    //note: this link is hardcoded to port 5000! when running through apache 2 you need http://IP:80/station/ or simply http://IP/station
     var jqxhr = $.getJSON("http://localhost:5000/station/" + stationNumber, function(data){
     console.log("http://localhost:5000/station/" + stationNumber);    
 
@@ -222,7 +209,7 @@
         ]);
 
         var options = {
-          title: 'Average Number of Bike Available',
+          title: 'Average Number of Bikes Available',
           curveType: 'function',
           legend: { position: 'bottom' }
         };
@@ -249,7 +236,7 @@
         ]);
 
         var options2 = {
-          title: 'Average Weekly Bike Availability',
+          title: 'Average Weekly Bikes Available',
           pieHole: 0.4,
         };
 
