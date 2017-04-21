@@ -164,22 +164,22 @@
     sunday = Math.round(sunday/285);
     
     //setting up variables for second graph - total weekly bike usage
-    var totalAvailableBikes = (monday+tuesday+wednesday+thursday+friday+saturday+sunday); //note: average statistics
-    var totalAvailableStations = 0; //note: average statistics
+    var averageAvailableBikes = ((monday+tuesday+wednesday+thursday+friday+saturday+sunday)/7); //note: average statistics
+    var averageAvailableStations = 0; //note: average statistics
         
     for (var i=11; i < 2012; i++)   
     {    
-        totalAvailableStations += parseInt(JSON.stringify(data.data[i].available_bike_stands));
+        averageAvailableStations += parseInt(JSON.stringify(data.data[i].available_bike_stands));
     }
     
-    totalAvailableStations = totalAvailableStations/2001;
+    averageAvailableStations = averageAvailableStations/2001;
         
     document.getElementById('historicwrapper').style.display = "inline-block";
     console.log("Button Pressed Test - Station Name: " + stationName);
         
     document.getElementById('historic').innerHTML = "<h1>Historic Data</h1>" + "<p>Station Name: " + stationName + "</p>";
     google.charts.setOnLoadCallback(drawChart(monday,tuesday,wednesday,thursday,friday,saturday,sunday));
-    google.charts.setOnLoadCallback(drawChart2(totalAvailableBikes,totalAvailableStations));
+    google.charts.setOnLoadCallback(drawChart2(averageAvailableBikes,averageAvailableStations));
       
         
     }) 
