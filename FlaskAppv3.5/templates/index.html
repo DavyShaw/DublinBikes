@@ -71,7 +71,8 @@
 <script type="text/javascript">
     
    function showDiv(stationName,stationNumber) {
-   
+    
+    //note: this link is hardcoded! when running through apache 2 you need http://IP:80/station/ or simply http://IP/station
     var jqxhr = $.getJSON("http://localhost:5000/station/" + stationNumber, function(data){
     console.log("http://localhost:5000/station/" + stationNumber);    
 
@@ -215,9 +216,9 @@
           ['Tues',  tues],
           ['Weds',  weds],
           ['Thurs',  thurs],
-          ['Fri',  thurs],
-          ['Sat',  thurs],
-          ['Sun',  thurs]
+          ['Fri',  fri],
+          ['Sat',  sat],
+          ['Sun',  sun]
         ]);
 
         var options = {
