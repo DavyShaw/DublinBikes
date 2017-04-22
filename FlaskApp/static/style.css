@@ -27,6 +27,8 @@ footer{
    src: url('LOKICOLA.ttf');
 }
 
+/* to get google font to work use font-family: 'Dancing Script', cursive; 
+also be sure to uncomment style import in index.html */
 
 h1,h2,h3 {
    font-family: colaFont;
