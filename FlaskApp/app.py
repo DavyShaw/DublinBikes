@@ -33,8 +33,7 @@ def get_db():
 
 @app.route("/")
 def mapview():
-    '''code adapted from http://flaskgooglemaps.pythonanywhere.com/
-    http://stackoverflow.com/questions/32201678/how-to-get-json-data-from-a-url-using-flask-in-python'''
+    '''functions does an API call to dublin bikes and our RDS Database to plot icons and live data on google map displayed on page '''
       
     output = []    
 
@@ -91,6 +90,8 @@ def mapview():
 
 @app.route('/station/<int:station_id>')
 def station(station_id):
+    '''function executes SQL query to our database using a customizeable station number based on station_id value passed in'''
+    
     sql = """SELECT available_bikes, available_bike_stands,last_update from stationDynamic where number = {}""".format(station_id)
     
     engine = get_db()

@@ -20,6 +20,8 @@ footer{
     width:80%;
 }
 
+
+/* Note: this works when run locally as flask app - does not work on product in live production via apache2 setup */
 @font-face {
    font-family: colaFont;
    src: url('LOKICOLA.ttf');
